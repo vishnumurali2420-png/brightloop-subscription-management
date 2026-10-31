@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_brightloop_discount_tree" model="ir.ui.view">
+        <field name="name">brightloop.discount.tree</field>
+        <field name="model">brightloop.discount</field>
+        <field name="arch" type="xml">
+            <tree string="Discounts &amp; Coupons">
+                <field name="name"/>
+                <field name="code"/>
+                <field name="discount_type"/>
+                <field name="discount_value"/>
+                <field name="min_purchase_amount"/>
+                <field name="start_date"/>
+                <field name="expiry_date"/>
+                <field name="usage_count"/>
+                <field name="max_usage_count"/>
+                <field name="active" widget="boolean_toggle"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_brightloop_discount_form" model="ir.ui.view">
+        <field name="name">brightloop.discount.form</field>
+        <field name="model">brightloop.discount</field>
+        <field name="arch" type="xml">
+            <form string="Discount Rule">
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name" class="oe_edit_only"/>
+                        <h1><field name="name" placeholder="e.g. Enterprise Welcome 15%"/></h1>
+                    </div>
+                    <group>
+                        <group string="Rule Parameters">
+                            <field name="code" placeholder="PROMO15"/>
+                            <field name="discount_type"/>
+                            <field name="discount_value"/>
+                            <field name="active"/>
+                        </group>
+                        <group string="Restrictions &amp; Limits">
+                            <field name="min_purchase_amount"/>
+                            <field name="min_quantity"/>
+                            <field name="start_date"/>
+                            <field name="expiry_date"/>
+                            <field name="max_usage_count"/>
+                            <field name="usage_count" readonly="1"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Specific Scope">
+                            <group>
+                                <field name="applicable_product_ids" widget="many2many_tags"/>
+                                <field name="applicable_subscription_ids" widget="many2many_tags"/>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_brightloop_discounts" model="ir.actions.act_window">
+        <field name="name">Discounts &amp; Coupons</field>
+        <field name="res_model">brightloop.discount</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+</odoo>

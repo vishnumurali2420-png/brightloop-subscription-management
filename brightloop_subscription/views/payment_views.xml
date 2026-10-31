@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_brightloop_payment_tree" model="ir.ui.view">
+        <field name="name">brightloop.payment.tree</field>
+        <field name="model">brightloop.payment</field>
+        <field name="arch" type="xml">
+            <tree string="Subscription Payments">
+                <field name="name"/>
+                <field name="partner_id"/>
+                <field name="invoice_id"/>
+                <field name="subscription_id"/>
+                <field name="payment_method"/>
+                <field name="amount" sum="Total"/>
+                <field name="payment_date"/>
+                <field name="status" widget="badge" decoration-success="status == 'confirmed'" decoration-warning="status == 'draft'"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_brightloop_payment_form" model="ir.ui.view">
+        <field name="name">brightloop.payment.form</field>
+        <field name="model">brightloop.payment</field>
+        <field name="arch" type="xml">
+            <form string="Subscription Payment">
+                <header>
+                    <button name="action_confirm_payment" string="Confirm &amp; Reconcile" type="object" class="oe_highlight" invisible="status == 'confirmed'"/>
+                    <field name="status" widget="statusbar" statusbar_visible="draft,confirmed"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name" class="oe_edit_only"/>
+                        <h1><field name="name"/></h1>
+                    </div>
+                    <group>
+                        <group string="Transaction Details">
+                            <field name="partner_id"/>
+                            <field name="invoice_id"/>
+                            <field name="subscription_id"/>
+                            <field name="amount"/>
+                            <field name="currency_id" invisible="1"/>
+                        </group>
+                        <group string="Method &amp; Invoicing Info">
+                            <field name="payment_method"/>
+                            <field name="payment_date"/>
+                            <field name="invoice_amount_total"/>
+                            <field name="invoice_amount_residual"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Internal Notes">
+                            <field name="notes" placeholder="Transaction ref / bank reference / UPI ID..."/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_brightloop_payments" model="ir.actions.act_window">
+        <field name="name">Customer Payments</field>
+        <field name="res_model">brightloop.payment</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+</odoo>

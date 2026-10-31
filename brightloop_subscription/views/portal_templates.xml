@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="portal_my_home_menu_subscription" name="Portal layout : subscription menu entries" inherit_id="portal.portal_breadcrumbs" priority="20">
+        <xpath expr="//ol[hasclass('o_portal_submenu')]" position="inside">
+            <li t-if="page_name == 'subscription' or subscription" class="breadcrumb-item">
+                <a t-if="subscription" href="/my/subscriptions">Subscriptions</a>
+                <t t-else="">Subscriptions</t>
+            </li>
+            <li t-if="subscription" class="breadcrumb-item active">
+                <t t-out="subscription.name"/>
+            </li>
+        </xpath>
+    </template>
+
+    <template id="portal_my_home_subscription" name="Portal My Home : Subscriptions" inherit_id="portal.portal_my_home" priority="20">
+        <xpath expr="//div[hasclass('o_portal_docs')]" position="inside">
+            <t t-call="portal.portal_docs_entry">
+                <t t-set="title">Subscriptions</t>
+                <t t-set="url" t-value="'/my/subscriptions'"/>
+                <t t-set="placeholder_count" t-value="'subscription_count'"/>
+            </t>
+        </xpath>
+    </template>
+
+    <template id="portal_my_subscriptions" name="My Subscriptions">
+        <t t-call="portal.portal_layout">
+            <t t-set="breadcrumbs_searchbar" t-value="True"/>
+            <div class="card shadow-sm mt-3">
+                <div class="card-header bg-white py-3">
+                    <h4 class="mb-0 text-primary" style="color: #6C5CE7 !important;"><i class="fa fa-refresh me-2"/>My Subscriptions</h4>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Subscription #</th>
+                                    <th>Plan</th>
+                                    <th>Start Date</th>
+                                    <th>Expiry Date</th>
+                                    <th>Billing Amount</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-foreach="subscriptions" t-as="sub">
+                                    <tr>
+                                        <td><a t-attf-href="/my/subscription/#{sub.id}"><strong t-out="sub.name"/></a></td>
+                                        <td t-out="sub.plan_id.name"/>
+                                        <td t-out="sub.start_date"/>
+                                        <td t-out="sub.expiry_date or 'Auto-Renewing'"/>
+                                        <td><strong>₹<t t-out="sub.amount_total"/></strong></td>
+                                        <td>
+                                            <span t-if="sub.status == 'active'" class="badge bg-success">Active</span>
+                                            <span t-elif="sub.status == 'paused'" class="badge bg-warning text-dark">Paused</span>
+                                            <span t-elif="sub.status == 'expired'" class="badge bg-danger">Expired</span>
+                                            <span t-else="" class="badge bg-secondary"><t t-out="sub.status"/></span>
+                                        </td>
+                                    </tr>
+                                </t>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+
+    <template id="portal_my_subscription_detail" name="Subscription Detail">
+        <t t-call="portal.portal_layout">
+            <div class="container py-4">
+                <div class="card shadow-sm border-0 mb-4">
+                    <div class="card-header d-flex justify-content-between align-items-center" style="background: linear-gradient(135deg, #6C5CE7 0%, #A29BFE 100%); color: white;">
+                        <div>
+                            <h3 class="mb-0 text-white" t-out="subscription.name"/>
+                            <small class="text-white-50">Plan: <t t-out="subscription.plan_id.name"/></small>
+                        </div>
+                        <div>
+                            <t t-if="subscription.status == 'active' and subscription.plan_id.allow_pause">
+                                <a t-attf-href="/my/subscription/#{subscription.id}/pause" class="btn btn-sm btn-outline-light me-2"><i class="fa fa-pause"/> Pause</a>
+                            </t>
+                            <t t-if="subscription.status == 'paused'">
+                                <a t-attf-href="/my/subscription/#{subscription.id}/resume" class="btn btn-sm btn-success me-2"><i class="fa fa-play"/> Resume</a>
+                            </t>
+                            <t t-if="subscription.status in ('active', 'paused') and subscription.plan_id.allow_early_cancellation">
+                                <a t-attf-href="/my/subscription/#{subscription.id}/cancel" class="btn btn-sm btn-danger"><i class="fa fa-times"/> Cancel</a>
+                            </t>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="row mb-4">
+                            <div class="col-md-3"><strong>Status:</strong> <span class="badge bg-primary" t-out="subscription.status"/></div>
+                            <div class="col-md-3"><strong>Start Date:</strong> <span t-out="subscription.start_date"/></div>
+                            <div class="col-md-3"><strong>Next Billing:</strong> <span t-out="subscription.next_billing_date"/></div>
+                            <div class="col-md-3"><strong>Total Recurring:</strong> ₹<span t-out="subscription.amount_total"/></div>
+                        </div>
+
+                        <h5 class="mt-4 mb-3" style="color: #6C5CE7;">Invoiced History</h5>
+                        <table class="table table-bordered">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Invoice #</th>
+                                    <th>Invoice Date</th>
+                                    <th>Amount</th>
+                                    <th>Payment Status</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-foreach="subscription.invoice_ids" t-as="inv">
+                                    <tr>
+                                        <td t-out="inv.name"/>
+                                        <td t-out="inv.invoice_date"/>
+                                        <td>₹<t t-out="inv.amount_total"/></td>
+                                        <td>
+                                            <span t-if="inv.payment_state == 'paid'" class="badge bg-success">Paid</span>
+                                            <span t-else="" class="badge bg-warning text-dark"><t t-out="inv.payment_state"/></span>
+                                        </td>
+                                        <td>
+                                            <a t-attf-href="/my/invoices/#{inv.id}" class="btn btn-sm btn-outline-primary"><i class="fa fa-download"/> View</a>
+                                        </td>
+                                    </tr>
+                                </t>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+</odoo>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="mail_template_subscription_renewal_reminder" model="mail.template">
+            <field name="name">Brightloop: Subscription Renewal Reminder</field>
+            <field name="model_id" ref="model_brightloop_subscription"/>
+            <field name="subject">Upcoming Renewal for Subscription {{ object.name }} - Brightloop Software</field>
+            <field name="email_from">{{ (object.company_id.email or user.email) }}</field>
+            <field name="partner_to">{{ object.partner_id.id }}</field>
+            <field name="body_html" type="html">
+                <div style="font-family: Arial, sans-serif; font-size: 14px; color: #333;">
+                    <p>Dear <t t-out="object.partner_id.name"/>,</p>
+                    <p>This is a friendly reminder that your subscription <strong><t t-out="object.name"/></strong> for 
+                    <strong><t t-out="object.plan_id.name"/></strong> is scheduled to renew / expire on 
+                    <strong><t t-out="object.expiry_date"/></strong>.</p>
+                    <p>Amount: <strong>₹<t t-out="object.amount_total"/></strong></p>
+                    <p>You can review and manage your subscription anytime via your Brightloop Customer Portal.</p>
+                    <p style="margin-top: 20px;">Thank you for partnering with Brightloop Software!</p>
+                </div>
+            </field>
+        </record>
+    </data>
+</odoo>

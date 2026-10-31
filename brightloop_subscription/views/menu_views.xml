@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Root Menu -->
+    <menuitem id="menu_brightloop_root" name="Brightloop Subscriptions" web_icon="brightloop_subscription,static/description/icon.png" sequence="10"/>
+
+    <!-- Top Categories -->
+    <menuitem id="menu_brightloop_dashboard" name="Dashboard" parent="menu_brightloop_root" action="action_brightloop_dashboard" sequence="1"/>
+    <menuitem id="menu_brightloop_customers" name="Customers" parent="menu_brightloop_root" action="base.action_partner_customer_form" sequence="2"/>
+    <menuitem id="menu_brightloop_products_top" name="Products" parent="menu_brightloop_root" action="action_brightloop_products" sequence="3"/>
+    <menuitem id="menu_brightloop_plans_top" name="Subscription Plans" parent="menu_brightloop_root" action="action_brightloop_plans" sequence="4"/>
+    <menuitem id="menu_brightloop_quotations_top" name="Quotations" parent="menu_brightloop_root" action="action_brightloop_quotations" sequence="5"/>
+    <menuitem id="menu_brightloop_subs_top" name="Subscriptions" parent="menu_brightloop_root" action="action_brightloop_subscriptions" sequence="6"/>
+    <menuitem id="menu_brightloop_invoices_top" name="Invoices" parent="menu_brightloop_root" action="action_brightloop_invoices" sequence="7"/>
+    <menuitem id="menu_brightloop_discounts_top" name="Discounts" parent="menu_brightloop_root" action="action_brightloop_discounts" sequence="8" groups="brightloop_subscription.group_brightloop_admin"/>
+    <menuitem id="menu_brightloop_payments_top" name="Payments" parent="menu_brightloop_root" action="action_brightloop_payments" sequence="9"/>
+    
+    <!-- Settings & Templates -->
+    <menuitem id="menu_brightloop_config" name="Configuration" parent="menu_brightloop_root" sequence="10" groups="brightloop_subscription.group_brightloop_admin"/>
+    <menuitem id="menu_brightloop_quote_templates" name="Quotation Templates" parent="menu_brightloop_config" action="action_brightloop_quotation_templates" sequence="1"/>
+</odoo>

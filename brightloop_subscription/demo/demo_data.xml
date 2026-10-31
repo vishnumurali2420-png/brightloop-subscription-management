@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Customers -->
+        <record id="demo_customer_1" model="res.partner">
+            <field name="name">Apex Digital Solutions</field>
+            <field name="email">billing@apexdigital.com</field>
+            <field name="customer_rank">1</field>
+            <field name="city">Bangalore</field>
+            <field name="country_id" ref="base.in"/>
+        </record>
+
+        <record id="demo_customer_2" model="res.partner">
+            <field name="name">Zenith Retailers Ltd</field>
+            <field name="email">contact@zenithretail.in</field>
+            <field name="customer_rank">1</field>
+            <field name="city">Mumbai</field>
+            <field name="country_id" ref="base.in"/>
+        </record>
+
+        <!-- Product: Business Software with Variants -->
+        <record id="product_business_software" model="product.template">
+            <field name="name">Business Software</field>
+            <field name="type">service</field>
+            <field name="list_price">2000.0</field>
+            <field name="standard_price">800.0</field>
+            <field name="is_subscription_product" eval="True"/>
+            <field name="description">All-in-one Brightloop cloud software for growing enterprises.</field>
+        </record>
+
+        <!-- Product Variant: Odoo Brand variant (+560 INR) -->
+        <record id="product_business_software_odoo_variant" model="product.product">
+            <field name="name">Business Software (Odoo Brand)</field>
+            <field name="product_tmpl_id" ref="product_business_software"/>
+            <field name="lst_price">2560.0</field>
+            <field name="standard_price">900.0</field>
+        </record>
+
+        <!-- Subscription Plans -->
+        <record id="plan_business_monthly" model="brightloop.subscription.plan">
+            <field name="name">Business Software Monthly</field>
+            <field name="product_id" ref="product_business_software_odoo_variant"/>
+            <field name="price">2560.0</field>
+            <field name="billing_frequency">monthly</field>
+            <field name="billing_interval">1</field>
+            <field name="min_quantity">1</field>
+            <field name="auto_renewal" eval="True"/>
+            <field name="allow_early_cancellation" eval="True"/>
+            <field name="allow_pause" eval="True"/>
+            <field name="status">active</field>
+        </record>
+
+        <record id="plan_business_yearly" model="brightloop.subscription.plan">
+            <field name="name">Business Software Enterprise Yearly</field>
+            <field name="product_id" ref="product_business_software_odoo_variant"/>
+            <field name="price">25000.0</field>
+            <field name="billing_frequency">yearly</field>
+            <field name="billing_interval">1</field>
+            <field name="min_quantity">1</field>
+            <field name="auto_renewal" eval="True"/>
+            <field name="allow_early_cancellation" eval="False"/>
+            <field name="allow_pause" eval="False"/>
+            <field name="status">active</field>
+        </record>
+
+        <!-- Discount Rule: 10% Off -->
+        <record id="demo_discount_10" model="brightloop.discount">
+            <field name="name">Growth 10% Discount</field>
+            <field name="code">GROWTH10</field>
+            <field name="discount_type">percentage</field>
+            <field name="discount_value">10.0</field>
+            <field name="min_purchase_amount">2000.0</field>
+            <field name="max_usage_count">50</field>
+            <field name="active" eval="True"/>
+        </record>
+    </data>
+</odoo>

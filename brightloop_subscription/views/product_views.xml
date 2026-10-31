@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="product_template_subscription_form_view" model="ir.ui.view">
+        <field name="name">product.template.subscription.form</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_only_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@name='options']" position="inside">
+                <span class="d-inline-block">
+                    <field name="is_subscription_product"/>
+                    <label for="is_subscription_product"/>
+                </span>
+            </xpath>
+            <xpath expr="//page[@name='general_information']" position="after">
+                <page name="subscription_plans" string="Subscription Plans" invisible="not is_subscription_product">
+                    <field name="subscription_plan_ids">
+                        <tree>
+                            <field name="name"/>
+                            <field name="billing_frequency"/>
+                            <field name="price"/>
+                            <field name="status" widget="badge" decoration-success="status == 'active'"/>
+                        </tree>
+                    </field>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="action_brightloop_products" model="ir.actions.act_window">
+        <field name="name">Subscription Products</field>
+        <field name="res_model">product.template</field>
+        <field name="view_mode">kanban,tree,form</field>
+        <field name="domain">[('is_subscription_product', '=', True)]</field>
+        <field name="context">{'default_is_subscription_product': True}</field>
+    </record>
+</odoo>
